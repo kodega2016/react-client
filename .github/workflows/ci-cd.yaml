@@ -10,4 +10,4 @@ jobs:
       - name: build the docker image
         run: |
           docker build . -f Dockerfile.dev -t kodega2016/react-app
-          docker container run -it kodega2016/react-app npm run test
+          docker container run -e CI=true kodega2016/react-app npm run test
