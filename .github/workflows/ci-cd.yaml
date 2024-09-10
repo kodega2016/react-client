@@ -7,3 +7,7 @@ jobs:
     steps:
       - name: checkout the code
         uses: actions/checkout@v4
+      - name: build the docker image
+        run: |
+          docker build . -f Dockerfile.dev -t kodega2016/react-app
+          docker container run --d --rm -it kodega2016/react-app npm run test
