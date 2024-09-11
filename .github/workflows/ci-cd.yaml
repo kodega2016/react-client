@@ -29,6 +29,6 @@ jobs:
           application_name: react-app
           environment_name: React-app-env
           version_label: 12345
-          region: us-west-1
+          region: us-east-1
           deployment_package: deploy.zip
           existing_bucket_name: elasticbeanstalk-us-east-1-058264439907
