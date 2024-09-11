@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# React JS Dockerized Appliction deployment on AWS Elastic Beanstalk
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+In this project, we will deploy a React JS application to AWS Elastic Beanstalk using Docker. We will use Docker to containerize the React JS application and Elastic Beanstalk to deploy and manage the application in a load-balanced and scalable environment.
 
-## Available Scripts
 
-In the project directory, you can run:
+So let's get started.
 
-### `npm start`
+First of all, we need to create and dockerize a React JS application. We will use the create-react-app to create a new React JS application. If you don't have create-react-app installed on your system, you can install it using the following command.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npx create-react-app react-docker
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+After that,we have to create a Dockerfile in the root directory of the project. The Dockerfile will look like this:
 
-### `npm test`
+```Dockerfile
+FROM node:alpine as builder
+WORKDIR /app
+COPY ./package.json .
+RUN npm install
+COPY . .
+RUN npm run build
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+FROM nginx
+EXPOSE 80
+COPY --from=builder /app/build /usr/share/nginx/html
+```
 
-### `npm run build`
+After that, lets create new Elastic Beanstalk environment with the
+AWS Management Console.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+After that, we have to create a new Elastic Beanstalk application and environment. To do this, follow the steps below:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Open the AWS Management Console and navigate to the Elastic Beanstalk dashboard.
+2. Click on the "Create New Application" button.
+3. Enter the application name and description.
+5. Select the "Web server environment" option.
+6. Enter the environment name and description.
+7. Select the "Docker" platform.
+8. Click on the "Create environment" button.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+After that, we have to create github workflow to deploy the application to Elastic Beanstalk.
+You can find the github workflow file in the .github/workflows directory.
 
-### `npm run eject`
+After that, we need to create an AWS IAM user with the AWS Elastic Beanstalk Full Access policy attached. We will use this IAM user to deploy the application to Elastic Beanstalk.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+And create a new secret in the GitHub repository with the AWS access key and secret key of the IAM user.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+After, that the application will be deployed to the Elastic Beanstalk environment automatically when you push the code to the GitHub repository.
