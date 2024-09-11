@@ -37,5 +37,5 @@ jobs:
           version_label: ${{github.sha}}
           region: us-east-1
           deployment_package: deploy.zip
-          existing_bucket_name: elasticbeanstalk-us-east-1-058264439907
+          existing_bucket_name: ${{secrets.S3_BUCKET_NAME}}
           use_existing_version_if_available: true
